@@ -1,0 +1,36 @@
+load("@org_pubref_rules_kotlin//kotlin:rules.bzl", "kotlin_android_library")
+
+PACKAGE = "com.kazucocoa.example_bazel"
+MANIFEST = "src/main/AndroidManifest.xml"
+
+android_library(
+    name = "res",
+    custom_package = PACKAGE,
+    manifest = MANIFEST,
+    resource_files = glob(["src/main/res/**/*"]),
+    deps = [
+        "@androidsdk//com.android.support:appcompat-v7-25.3.1",
+        "@androidsdk//com.android.support:design-25.3.1",
+        "@androidsdk//com.android.support.constraint:constraint-layout-1.0.0-beta4",
+    ],
+)
+
+kotlin_android_library(
+    name = "kt",
+    srcs = glob(["src/main/java/**/*.kt"]),
+    aar_deps = [
+        "@androidsdk//com.android.support:appcompat-v7-25.3.1",
+        "@androidsdk//com.android.support:design-25.3.1",
+        "@androidsdk//com.android.support.constraint:constraint-layout-1.0.0-beta4",
+    ]
+)
+
+android_binary(
+    name = "app",
+    custom_package = PACKAGE,
+    manifest = MANIFEST,
+    deps = [
+        ":kt",
+        ":res",
+    ],
+)
